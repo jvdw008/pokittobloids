@@ -12,7 +12,7 @@ import urandom as random
 import umachine             # For on-screen text
 import file as gfx          # Graphics
 import audio                # Audio
-import gc
+#import gc
 
 #gc.collect()
 #print ("free",gc.mem_free())
@@ -29,7 +29,7 @@ screen = pygame.display.set_mode() # full screen
 g_sound = pygame.mixer.Sound()
 
 # Variables
-version = 19                    # Version number of current game build
+version = 20                    # Version number of current game build
 
 menuSong = ""
 gameSong = ""
@@ -46,6 +46,10 @@ else:
     gameSong = "bloids/gameSong.wav"
     pauseSong = "dummy123.raw"
     
+
+# Delta timing variables
+targetFPS = 40
+
 musicEnabled = True
 musicIsPlaying = True
 showVersion = False
@@ -104,6 +108,16 @@ class Interface:
         
         self.x = 0
         self.y = 0
+        
+    def updateDelta(self, fps):
+        global targetFPS, isThisRealHardware
+        
+        result = 1000 // fps
+        
+        if (isThisRealHardware == True):
+            umachine.wait(1000 // fps)
+        else:
+            umachine.wait(1000 // result)
         
     # Game version
     def showVersion(self):
@@ -578,6 +592,8 @@ interface.playMenuMusic()
 
 # The main loop
 while True:
+    
+    interface.updateDelta(targetFPS)
 
     # Read keys
     eventtype = pygame.event.poll()
@@ -710,7 +726,8 @@ while True:
             umachine.draw_text(40, 20, "A: START", 4)
             umachine.draw_text(40, 27, "B: INFO (hold)", 4)
             umachine.draw_text(2, 34, "MUSIC: Left(on) Right(off)", 4)
-            umachine.draw_text(1, 45, "by Blackjet in 2019 - v0." + str(version), 8)
+            umachine.draw_text(15, 42, "by Blackjet in 2019", 8)
+            umachine.draw_text(87, 82, "v0." + str(version), 14)
             
     # Game
     else:
@@ -778,8 +795,6 @@ while True:
             
         # Draw all placed face pieces
         faces.drawAll()
-        
-        
     
     # Sync screen
     pygame.display.flip()
