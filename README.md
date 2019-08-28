@@ -1,5 +1,5 @@
 # pokittobloids
-A game I made in two weeks for the Pokitto handheld. Find it here: https://www.pokitto.com/
+A game I made in three weeks for the Pokitto handheld. Find it here: https://www.pokitto.com/
 
 Installation:
 Download the zip file, extract the bin file to the root of your sd card, the copy the bloids folder to your sd card. File structure should be:
